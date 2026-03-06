@@ -1,6 +1,10 @@
 let humanScore = 0;
 let computerScore = 0;
 
+// pegar elementos do DOM
+const resultado = document.querySelector("#resultado");
+const placar = document.querySelector("#placar");
+
 function getComputerChoice() {
   let escolha = parseInt(Math.random() * 3);
   switch (escolha) {
@@ -15,55 +19,71 @@ function getComputerChoice() {
   }
 }
 
-function getHumanChoice() {
-  let escolhaHuman = prompt("Digite sua opção: ");
-  escolhaHuman = escolhaHuman.toLowerCase().trim();
+function playRound(humanChoice, computerChoice) {
 
-  if (
-    escolhaHuman !== "pedra" &&
-    escolhaHuman !== "papel" &&
-    escolhaHuman !== "tesoura"
-  ) {
-    return prompt("Digite novamente:");
+  if (humanScore >= 5 || computerScore >= 5) {
+    return;
   }
 
-  return escolhaHuman;
-}
-
-function playRound(humanChoice, computerChoice) {
   humanChoice = humanChoice.toLowerCase().trim();
   computerChoice = computerChoice.toLowerCase().trim();
 
-  console.log("Humano escolheu:", humanChoice);
-  console.log("Computador escolheu:", computerChoice);
+  let mensagem = "";
+
   if (humanChoice === "pedra" && computerChoice === "tesoura") {
-    console.log("Você venceu !!");
+    mensagem = "Você venceu!";
     humanScore++;
-  } else if (humanChoice === "tesoura" && computerChoice === "papel") {
-    console.log("Você venceu !!");
+  } 
+  else if (humanChoice === "tesoura" && computerChoice === "papel") {
+    mensagem = "Você venceu!";
     humanScore++;
-  } else if (humanChoice === "papel" && computerChoice === "pedra") {
-    console.log("Você venceu !!");
+  } 
+  else if (humanChoice === "papel" && computerChoice === "pedra") {
+    mensagem = "Você venceu!";
     humanScore++;
-  } else if (humanChoice === computerChoice) {
-    console.log("Empate !!");
-  } else {
-    console.log("Você perdeu !!");
+  } 
+  else if (humanChoice === computerChoice) {
+    mensagem = "Empate!";
+  } 
+  else {
+    mensagem = "Você perdeu!";
     computerScore++;
   }
+
+  resultado.textContent =
+    "Humano escolheu: " + humanChoice +
+    " | Computador escolheu: " + computerChoice +
+    " → " + mensagem;
+
+  placar.textContent =
+    "Humano: " + humanScore + " | Computador: " + computerScore;
 }
 
-function playGame() {
-  for (let i = 1; i <= 5; i++) {
-    let humanSelection = getHumanChoice();
-    let computerSelection = getComputerChoice();
+const pedra = document.querySelector("#pedra");
+const papel = document.querySelector("#papel");
+const tesoura = document.querySelector("#tesoura");
 
-    playRound(humanSelection, computerSelection);
-  }
-  console.log("Placar final:");
-  console.log("Humano:", humanScore);
-  console.log("Computador:", computerScore);
+pedra.addEventListener("click", function () {
+  playRound("pedra", getComputerChoice());
+});
+
+papel.addEventListener("click", function () {
+  playRound("papel", getComputerChoice());
+});
+
+tesoura.addEventListener("click", function () {
+  playRound("tesoura", getComputerChoice());
+});
+
+placar.textContent =
+  "Humano: " + humanScore + " | Computador: " + computerScore;
+
+if (humanScore === 5) {
+  resultado.textContent = "🎉 Você venceu o jogo!";
 }
 
-playGame();
+if (computerScore === 5) {
+  resultado.textContent = "💻 O computador venceu o jogo!";
+}
+
 console.log("FIM");
